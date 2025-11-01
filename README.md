@@ -107,7 +107,7 @@ YOLOv4_IE_GUI/
 
 1. 啟動 GUI。
 2. 填入或拖入 `.cfg`、`.weights`、`.names`、影像路徑。
-3. 點選 **▶ 單張預測（OpenCV DNN）**。
+3. 點選 ** 單張預測（OpenCV DNN）**。
 4. GUI 內即時顯示結果，並於 `runs/predictions/<timestamp>/` 儲存輸出：
 
    * `xxx_pred.png`
@@ -116,7 +116,7 @@ YOLOv4_IE_GUI/
 ###  批次推論 (Darknet.exe)
 
 1. 指定 `darknet.exe` 與 `.data`, `.cfg`, `.weights`, `test.txt`。
-2. 點選 **▶ 批次預測（darknet.exe）**。
+2. 點選 ** 批次預測（darknet.exe）**。
 3. 系統會自動執行推論並生成：
 
    * `out.json`
@@ -206,5 +206,6 @@ runs/predictions/20251101-121000/
 ---
 
 >  本專案旨在推廣深度學習於工程影像檢測的應用，期望能降低模型操作門檻，讓更多研究者與工程師能快速進行 YOLOv4 應用實驗。
+
 
 
