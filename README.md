@@ -1,6 +1,6 @@
 # YOLOv4 自動檢測 GUI (打包可攜版)
 
-**YOLOv4_IE_GUI** 是一款以 PySide6 製作的可視化圖形介面，用於自動執行 **YOLOv4 模型的影像或批次檢測**。此專案整合了 **OpenCV DNN 單張推論** 與 **Darknet 批次推論**，支援 **可攜式模式 (Portable Mode)**，可於 Windows 上單檔執行。
+**YOLOv4_GUI** 是一款以 PySide6 製作的可視化圖形介面，用於自動執行 **YOLOv4 模型的影像或批次檢測**。此專案整合了 **OpenCV DNN 單張推論** 與 **Darknet 批次推論**，支援 **可攜式模式 (Portable Mode)**，可於 Windows 上單檔執行。
 
 ---
 
@@ -192,7 +192,7 @@ runs/predictions/20251101-121000/
 ##  作者資訊
 
 * **開發者**：jiefoung
-* **版本**：YOLOv4_IE_GUI v1.0
+* **版本**：YOLOv4_GUI v1.0
 * **領域**：非破壞檢測 (NDT) 回波訊號自動識別
 * **說明**：以 YOLOv4 + OpenCV DNN 為核心，設計出友善的 GUI 工具，用於自動化裂縫回波訊號辨識。
 
@@ -206,3 +206,4 @@ runs/predictions/20251101-121000/
 ---
 
 >  本專案旨在推廣深度學習於工程影像檢測的應用，期望能降低模型操作門檻，讓更多研究者與工程師能快速進行 YOLOv4 應用實驗。
+
