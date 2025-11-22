@@ -1,6 +1,6 @@
-# YOLOv4 自動檢測 GUI 
+# RID 自動檢測 GUI
 
-**YOLOv4_GUI** 是一款以 PySide6 製作的可視化圖形介面，用於自動執行 **YOLOv4 模型的影像或批次檢測**。此專案整合了 **OpenCV DNN 單張推論** 與 **Darknet 批次推論**，支援 **可攜式模式 (Portable Mode)**，可於 Windows 上單檔執行。
+**RID 自動檢測 GUI** 是一款以 PySide6 製作的可視化圖形介面，用於自動執行 **RID回波 模型的影像或批次檢測**。此專案整合了 **OpenCV DNN 單張推論** 與 **Darknet 批次推論**，支援 **可攜式模式 (Portable Mode)**，可於 Windows 上單檔執行。
 
 ---
 
@@ -65,14 +65,14 @@ pip install -r requirements.txt
 ###  執行方式
 
 ```bash
-python YOLOV4_GUI_packed.py
+python DETECT_GUI_packed.py
 ```
 
 或打包為 EXE：
 
 ```bash
-pyinstaller -y -D -w YOLOV4_GUI_packed.py ^
-  --name YOLOv4_IE_GUI ^
+pyinstaller -y -D -w  DETECT_GUI_packed.py ^
+  --name  DETECT_GUI_packed ^
   --collect-all PySide6 ^
   --add-data "models/*.*;models" ^
   --add-data "darknet/*.*;darknet" ^
@@ -84,9 +84,9 @@ pyinstaller -y -D -w YOLOV4_GUI_packed.py ^
 ##  專案結構建議
 
 ```bash
-YOLOv4_IE_GUI/
+ DETECT_GUI_packed/
 │
-├─ YOLOV4_GUI_packed.py
+├─  DETECT_GUI_packed.py
 ├─ models/
 │   ├─ yolov4-obj.cfg
 │   ├─ yolov4-obj.weights
@@ -107,7 +107,7 @@ YOLOv4_IE_GUI/
 
 1. 啟動 GUI。
 2. 填入或拖入 `.cfg`、`.weights`、`.names`、影像路徑。
-3. 點選 ** 單張預測（OpenCV DNN）**。
+3. 點選 **▶ 單張預測（OpenCV DNN）**。
 4. GUI 內即時顯示結果，並於 `runs/predictions/<timestamp>/` 儲存輸出：
 
    * `xxx_pred.png`
@@ -116,7 +116,7 @@ YOLOv4_IE_GUI/
 ###  批次推論 (Darknet.exe)
 
 1. 指定 `darknet.exe` 與 `.data`, `.cfg`, `.weights`, `test.txt`。
-2. 點選 ** 批次預測（darknet.exe）**。
+2. 點選 **▶ 批次預測（darknet.exe）**。
 3. 系統會自動執行推論並生成：
 
    * `out.json`
@@ -192,7 +192,7 @@ runs/predictions/20251101-121000/
 ##  作者資訊
 
 * **開發者**：jiefoung
-* **版本**：YOLOv4_GUI v1.0
+* **版本**：DETECT_GUI_packed v1.0
 * **領域**：非破壞檢測 (NDT) 回波訊號自動識別
 * **說明**：以 YOLOv4 + OpenCV DNN 為核心，設計出友善的 GUI 工具，用於自動化裂縫回波訊號辨識。
 
@@ -206,6 +206,3 @@ runs/predictions/20251101-121000/
 ---
 
 >  本專案旨在推廣深度學習於工程影像檢測的應用，期望能降低模型操作門檻，讓更多研究者與工程師能快速進行 YOLOv4 應用實驗。
-
-
-
