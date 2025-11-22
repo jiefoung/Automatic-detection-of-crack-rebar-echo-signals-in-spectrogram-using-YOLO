@@ -351,23 +351,50 @@ class DarknetRunner(QThread):
 
 def _draw_box_with_label(img: np.ndarray, x: int, y: int, w: int, h: int, label: str, color: tuple):
     H, W = img.shape[:2]
-    x1 = max(0, x); y1 = max(0, y)
-    x2 = min(W - 1, x + w); y2 = min(H - 1, y + h)
+    x1 = max(0, x); 
+    y1 = max(0, y)
+    x2 = min(W - 1, x + w); 
+    y2 = min(H - 1, y + h)
+
+    # 畫框
     cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+
+    # 取得文字大小
     (tw, th), baseline = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
     pad = 4
-    bx = min(max(0, x1), max(0, W - (tw + 2*pad)))
-    by_top = y1 - (th + 2*pad + 2)
-    by_bot = y2 + 2
-    if by_top >= 0:
-        by = by_top
-    elif by_bot + th + 2*pad <= H:
-        by = by_bot
+
+    # ---------- ★ 重點：依 label 排文字層級 ----------
+    # surfacewave 要顯示在最上面
+    # vibration 次之
+    # r_echo 再下
+    label_lower = label.split(":")[0].strip().lower()
+
+    if "surfacewave" in label_lower:
+        label_offset = -30     # 最上方
+    elif "vibration" in label_lower:
+        label_offset = -10     # 中間
     else:
-        by = min(max(0, y1 + 2), max(0, H - (th + 2*pad)))
+        label_offset = +10     # r_echo 或其他類別 → 顯示在偏下方
+    # ---------------------------------------------------
+
+    # 計算文字放置位置
+    by = y1 + label_offset
+
+    # 防止跑出圖片外
+    by = max(0, min(by, H - (th + 2*pad)))
+
+    # 左右也防止超出
+    bx = min(max(0, x1), max(0, W - (tw + 2*pad)))
+
+    # 畫文字背景框
     cv2.rectangle(img, (bx, by), (bx + tw + 2*pad, by + th + 2*pad), color, thickness=-1)
-    cv2.putText(img, label, (bx + pad, by + th + pad), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,0), 2)
-    cv2.putText(img, label, (bx + pad, by + th + pad), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
+
+    # 畫文字（黑底白字）
+    cv2.putText(img, label, (bx + pad, by + th + pad),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,0), 2)
+    cv2.putText(img, label, (bx + pad, by + th + pad),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
+
 
 
 def run_single_opencv(image_path: str, cfg_path: str, weights_path: str, names: List[str],
@@ -407,18 +434,38 @@ def run_single_opencv(image_path: str, cfg_path: str, weights_path: str, names: 
             x, y, w, h = boxes[i]
             cid = class_ids[i]
             conf = confidences[i]
+
+            # r_echo 用黃框，其它用粉紅框
             color = (0, 255, 255) if cid < len(names) and names[cid] == 'r_echo' else (255, 0, 255)
             cv2.rectangle(img, (x, y), (x+w, y+h), color, 2)
-            label = f"{names[cid] if cid < len(names) else cid}: {conf:.2f}"
+
+            cls_name = names[cid] if cid < len(names) else str(cid)
+            label = f"{cls_name}: {conf:.2f}"
+
             text_x = max(0, x + 30)
-            text_y = y + h - 27
+
+            # 依類別決定文字基準高度
+            if cls_name == "surfacewave":
+                # 靠近框上緣，讓 surfacewave 顯示在比較上面
+                text_y = y + 20
+            elif cls_name == "vibration":
+                # 保持原來靠近框下緣
+                text_y = y + h - 27
+            else:
+                # 其他類別維持原本設定
+                text_y = y + h - 27
+
+            # 若和既有文字太接近，就往下微調，避免互相蓋住
             while any(abs(text_y - uy) < 18 for uy in used_positions):
                 text_y += 7
             text_y = min(max(0, text_y), img.shape[0] - 5)
             used_positions.append(text_y)
+
             cv2.putText(img, label, (text_x, text_y),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+
             results.append((cid, conf, (x, y, w, h)))
+
     return img, results
 
 
